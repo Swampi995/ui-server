@@ -9,6 +9,7 @@ const project = require('../project.config')
 const compress = require('compression')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
+const User = require('../src/model/users')
 
 const app = express()
 const router = express.Router()
@@ -40,6 +41,32 @@ router.get('/', function (req, res) {
 })
 
 app.use('/api', router)
+const mongoDB = 'mongodb://swampi:garile@ds259855.mlab.com:59855/your-organizer'
+mongoose.connect(mongoDB, {
+  useMongoClient: true
+})
+const db = mongoose.connection
+db.on('error', console.error.bind(console, 'MongoDB connection error:'))
+router.route('/users')
+  .get(function (req, res) {
+    User.find(function (err, users) {
+      if (err)
+        res.send(err)
+      res.json(users)
+    })
+  })
+  .post(function (req, res) {
+    var newUser = new User()
+    newUser.user = req.body.user
+    newUser.password = req.body.password
+    newUser.save(function (err) {
+      if (err)
+        res.send(err)
+      res.json({
+        message: 'User successfully created'
+      })
+    })
+  })
 // ------------------------------------
 // Apply Webpack HMR Middleware
 // ------------------------------------
