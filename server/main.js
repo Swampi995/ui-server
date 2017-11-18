@@ -1,3 +1,5 @@
+'use strict'
+
 const express = require('express')
 const path = require('path')
 const webpack = require('webpack')
@@ -5,10 +7,39 @@ const logger = require('../build/lib/logger')
 const webpackConfig = require('../build/webpack.config')
 const project = require('../project.config')
 const compress = require('compression')
+const mongoose = require('mongoose')
+const bodyParser = require('body-parser')
 
 const app = express()
-app.use(compress())
+const router = express.Router()
 
+app.use(compress())
+app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.json())
+app.use(function (req, res, next) {
+  // Website you wish to allow to connect
+  res.setHeader('Access-Control-Allow-Origin', '*')
+
+  // Request methods you wish to allow
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE')
+
+  // Request headers you wish to allow
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type')
+
+  // Set to true if you need the website to include cookies in the requests sent
+  // to the API (e.g. in case you use sessions)
+  res.setHeader('Access-Control-Allow-Credentials', true)
+
+  res.setHeader('Cache-Control', 'no-cache')
+
+  // Pass to next layer of middleware
+  next()
+})
+router.get('/', function (req, res) {
+  res.json({message: 'API Initialized!'})
+})
+
+app.use('/api', router)
 // ------------------------------------
 // Apply Webpack HMR Middleware
 // ------------------------------------
@@ -17,13 +48,13 @@ if (project.env === 'development') {
 
   logger.info('Enabling webpack development and HMR middleware')
   app.use(require('webpack-dev-middleware')(compiler, {
-    publicPath  : webpackConfig.output.publicPath,
-    contentBase : path.resolve(project.basePath, project.srcDir),
-    hot         : true,
-    quiet       : false,
-    noInfo      : false,
-    lazy        : false,
-    stats       : 'normal',
+    publicPath: webpackConfig.output.publicPath,
+    contentBase: path.resolve(project.basePath, project.srcDir),
+    hot: true,
+    quiet: false,
+    noInfo: false,
+    lazy: false,
+    stats: 'normal',
   }))
   app.use(require('webpack-hot-middleware')(compiler, {
     path: '/__webpack_hmr'

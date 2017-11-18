@@ -5,7 +5,8 @@ import './PageLayout.scss'
 import AppBar from 'material-ui/AppBar'
 import {FlatButton, IconButton} from 'material-ui'
 import {NavigationClose} from 'material-ui/svg-icons/index'
-import {Logged} from './components/Logged';
+import {Logged} from './components/Logged'
+import DATA from '../../data'
 
 class PageLayout extends React.Component {
 
@@ -40,7 +41,7 @@ class PageLayout extends React.Component {
     return (
       <div>
         <AppBar
-          title='Title'
+          title={DATA[0].userName}
           conElementLeft={<IconButton><NavigationClose/></IconButton>}
           iconElementRight={this.state.logged ? <Logged logged={this.changeLogged}/> :
             <FlatButton onClick={this.changeLogged} label='Login'/>}
