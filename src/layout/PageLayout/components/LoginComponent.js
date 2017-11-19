@@ -30,8 +30,14 @@ class LoginComponent extends React.Component {
     this.setState({open: false})
   }
 
-  doLogin () {
+  requestLogin () {
+    let user = this.props.users.filter(user => user.user === this.state.username)
+    user[0] && user[0].password === this.state.password ? this.doLogin(user[0]) : this.setErrorMessage('Wrong username or password!')
+  }
+
+  doLogin (user) {
     this.props.logged()
+    this.props.setLoggedUser(user)
     this.setState({open: false})
   }
 
@@ -40,7 +46,7 @@ class LoginComponent extends React.Component {
   }
 
   handleRequestLogin = () => {
-    this.state.username !== '' && this.state.password !== '' ? this.doLogin() : this.setErrorMessage('Wrong username or password!')
+    this.state.username !== '' && this.state.password !== '' ? this.requestLogin() : this.setErrorMessage('Wrong username or password!')
   }
 
   handleChange = name => event => {
@@ -78,7 +84,7 @@ class LoginComponent extends React.Component {
             onChange={this.handleChange('password')}
           />
           <br />
-          <FlatButton label='Register' primary={true} />
+          <FlatButton label='Register' primary={true}/>
           <br />
         </Dialog>
       </div>
@@ -88,6 +94,9 @@ class LoginComponent extends React.Component {
 
 LoginComponent.propTypes = {
   logged: PropTypes.func,
+  users: PropTypes.array,
+  setLoggedUser: PropTypes.func,
+  registerUser: PropTypes.func
 }
 
 export default LoginComponent

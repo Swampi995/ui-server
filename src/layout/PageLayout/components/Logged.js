@@ -13,10 +13,10 @@ export const Logged = (props) => (
   >
     <MenuItem primaryText='Refresh'/>
     <MenuItem primaryText='Help'/>
-    <MenuItem onClick={props.logged} primaryText='Sign out'/>
+    <MenuItem onClick={props.logOut} primaryText='Sign out'/>
   </IconMenu>
 )
 
 Logged.propTypes = {
-  logged: PropTypes.func,
+  logOut: PropTypes.func,
 }

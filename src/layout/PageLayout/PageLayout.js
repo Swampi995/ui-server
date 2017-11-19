@@ -15,11 +15,23 @@ class PageLayout extends React.Component {
     super()
     this.state = {
       logged: false,
-      users: []
+      users: [],
+      loggedUser: []
     }
     this.changeLogged = this.changeLogged.bind(this)
     this.loadUsers = this.loadUsers.bind(this)
     this.addUser = this.addUser.bind(this)
+    this.setLoggedUser = this.setLoggedUser.bind(this)
+    this.logout = this.logout.bind(this)
+  }
+
+  setLoggedUser (user) {
+    this.setState({loggedUser: user})
+  }
+
+  logout () {
+    this.changeLogged()
+    this.setLoggedUser([])
   }
 
   loadUsers () {
@@ -62,9 +74,9 @@ class PageLayout extends React.Component {
     this.loadUsers()
   }
 
-  getUserName() {
+  getUserName () {
     let userName
-    this.state.users.length > 0 ? userName = this.state.users[0].user : userName = ''
+    this.state.loggedUser ? userName = this.state.loggedUser.user : userName = ''
     return userName
   }
 
@@ -74,8 +86,11 @@ class PageLayout extends React.Component {
         <AppBar
           title={this.getUserName()}
           iconElementLeft={<IconButton><NavigationClose/></IconButton>}
-          iconElementRight={this.state.logged ? <Logged logged={this.changeLogged}/> :
-            <LoginComponent logged={this.changeLogged}/>}
+          iconElementRight={this.state.logged ? <Logged logOut={this.logout} /> :
+            <LoginComponent registerUser={this.addUser}
+                            setLoggedUser={this.setLoggedUser}
+                            users={this.state.users}
+                            logged={this.changeLogged}/>}
         />
         {this.state.logged ? this.getLinks() : null}
       </div>)
