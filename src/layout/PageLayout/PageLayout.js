@@ -3,10 +3,11 @@ import { IndexLink, Link } from 'react-router'
 import PropTypes from 'prop-types'
 import './PageLayout.scss'
 import AppBar from 'material-ui/AppBar'
-import { FlatButton, IconButton } from 'material-ui'
+import { IconButton } from 'material-ui'
 import { NavigationClose } from 'material-ui/svg-icons/index'
 import { Logged } from './components/Logged'
 import axios from 'axios'
+import LoginComponent from './components/LoginComponent'
 
 class PageLayout extends React.Component {
 
@@ -74,7 +75,7 @@ class PageLayout extends React.Component {
           title={this.getUserName()}
           iconElementLeft={<IconButton><NavigationClose/></IconButton>}
           iconElementRight={this.state.logged ? <Logged logged={this.changeLogged}/> :
-            <FlatButton onClick={this.changeLogged} label='Login'/>}
+            <LoginComponent logged={this.changeLogged}/>}
         />
         {this.state.logged ? this.getLinks() : null}
       </div>)
