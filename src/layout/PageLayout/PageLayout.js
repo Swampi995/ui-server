@@ -10,7 +10,6 @@ import axios from 'axios'
 import LoginComponent from './components/LoginComponent'
 
 class PageLayout extends React.Component {
-
   constructor () {
     super()
     this.state = {
@@ -85,12 +84,12 @@ class PageLayout extends React.Component {
       <div>
         <AppBar
           title={this.getUserName()}
-          iconElementLeft={<IconButton><NavigationClose/></IconButton>}
-          iconElementRight={this.state.logged ? <Logged logOut={this.logout} /> :
-            <LoginComponent registerUser={this.addUser}
-                            setLoggedUser={this.setLoggedUser}
-                            users={this.state.users}
-                            logged={this.changeLogged}/>}
+          iconElementLeft={<IconButton><NavigationClose /></IconButton>}
+          iconElementRight={this.state.logged ? <Logged logOut={this.logout}/>
+            : <LoginComponent registerUser={this.addUser}
+                              setLoggedUser={this.setLoggedUser}
+                              users={this.state.users}
+                              logged={this.changeLogged}/>}
         />
         {this.state.logged ? this.getLinks() : null}
       </div>)
